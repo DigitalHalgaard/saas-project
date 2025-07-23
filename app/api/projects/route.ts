@@ -2,11 +2,18 @@
 // app/api/projects/route.ts
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+
 const prisma = new PrismaClient()
 
 export async function GET() {
-  const projects = await prisma.project.findMany({
-    include: { organization: true }
-  })
-  return NextResponse.json({ projects })
+  try {
+    const projects = await prisma.project.findMany({
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json({ projects })
+  } catch (error) {
+    console.error('API error:', error)
+    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 })
+  }
 }

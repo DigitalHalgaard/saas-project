@@ -1,7 +1,5 @@
-
 // lib/access.ts
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { prisma } from './prisma'
 
 export async function canViewProject(userId: string, projectId: string) {
   const access = await prisma.projectAccess.findFirst({
